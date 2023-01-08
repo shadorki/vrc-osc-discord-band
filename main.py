@@ -1,21 +1,23 @@
 import asyncio
-from pythonosc.udp_client import SimpleUDPClient
+from discord_band import DiscordBand
 from winsdk.windows.ui.notifications.management import UserNotificationListener, UserNotificationListenerAccessStatus
 from winsdk.windows.foundation.metadata import ApiInformation
 
 
-def handler(client: SimpleUDPClient):
+def handler(discord_band: DiscordBand):
+    isEnabled = False
+    disablingTimer = 5
+
     def closure(listener, event):
         notification = listener.get_notification(event.user_notification_id)
         if hasattr(notification, "app_info"):
             app_name = notification.app_info.display_info.display_name
             if app_name == "Discord":
-                # dispatch to vrchat
-                client.send_message("/avatar/parameters/osc_discord_band", True)
+                discord_band.enable()
     return closure
 
 
-async def init():
+async def init(discord_band: DiscordBand):
     if not ApiInformation.is_type_present("Windows.UI.Notifications.Management.UserNotificationListener"):
         print("UserNotificationListener is not supported on this device.")
         exit()
@@ -27,9 +29,14 @@ async def init():
         print("Access to UserNotificationListener is not allowed.")
         exit()
 
-    osc_client = SimpleUDPClient("https://127.0.0.0", 9000)
-    listener.add_notification_changed(handler(osc_client))
+    listener.add_notification_changed(handler(discord_band))
 
 
-asyncio.run(init())
-input('Press Enter to exit')
+discord_band = DiscordBand()
+try:
+    asyncio.run(init(discord_band))
+    input("Press Enter to exit\n")
+except KeyboardInterrupt:
+    print("Shutting Down...")
+finally:
+    discord_band.dispose()
