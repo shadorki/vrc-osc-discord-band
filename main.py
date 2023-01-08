@@ -5,9 +5,6 @@ from winsdk.windows.foundation.metadata import ApiInformation
 
 
 def handler(discord_band: DiscordBand):
-    isEnabled = False
-    disablingTimer = 5
-
     def closure(listener, event):
         notification = listener.get_notification(event.user_notification_id)
         if hasattr(notification, "app_info"):
