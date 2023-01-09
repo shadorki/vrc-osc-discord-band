@@ -26,14 +26,12 @@ class DiscordBand:
         self.thread.join()
 
     def enable(self):
-        print("Enabling")
         self.osc_client.send_message(
             "/avatar/parameters/osc_discord_band", True)
         self.is_enabled = True
         self.disable_timer = 5
 
     def disable(self):
-        print("Disabling")
         self.osc_client.send_message(
             "/avatar/parameters/osc_discord_band", False)
         self.is_enabled = False
