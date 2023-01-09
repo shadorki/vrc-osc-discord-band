@@ -1,12 +1,12 @@
 import asyncio
 from discord_band import DiscordBand
+from windows import Windows
 from winsdk.windows.ui.notifications.management import UserNotificationListener, UserNotificationListenerAccessStatus
 from winsdk.windows.foundation.metadata import ApiInformation
 
 
 def handler(discord_band: DiscordBand):
-    def closure(listener, event):
-        notification = listener.get_notification(event.user_notification_id)
+    def closure(notification):
         if hasattr(notification, "app_info"):
             app_name = notification.app_info.display_info.display_name
             if app_name == "Discord":
@@ -14,7 +14,7 @@ def handler(discord_band: DiscordBand):
     return closure
 
 
-async def init(discord_band: DiscordBand):
+async def init(discord_band: DiscordBand, windows: Windows):
     if not ApiInformation.is_type_present("Windows.UI.Notifications.Management.UserNotificationListener"):
         print("UserNotificationListener is not supported on this device.")
         exit()
@@ -26,14 +26,19 @@ async def init(discord_band: DiscordBand):
         print("Access to UserNotificationListener is not allowed.")
         exit()
 
-    listener.add_notification_changed(handler(discord_band))
+    windows.add_notification_listener(handler(discord_band))
+    await windows.run()
 
 
 discord_band = DiscordBand()
 try:
-    asyncio.run(init(discord_band))
-    input("Press Enter to exit\n")
+    print("Starting VRC Discord Notifications...")
+    windows = Windows()
+    asyncio.run(init(discord_band, windows))
 except KeyboardInterrupt:
-    print("Shutting Down...")
+    print("Shutting Down...\n")
+except OSError as e:
+    print(e)
+    input("Caught issue with Windows\n")
 finally:
     discord_band.dispose()

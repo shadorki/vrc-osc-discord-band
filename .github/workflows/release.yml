@@ -1,30 +1,75 @@
+name: Release
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
-  build:
-    # Windows is currently the only platform this action supports
+  Build:
+    name: Build release
     runs-on: windows-latest
 
     steps:
-      # Check-out repository
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # Setup Python
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v2
         with:
-          python-version: "3.10.9" # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: "x64" # optional x64 or x86. Defaults to x64 if not specified
-      
-      - name: Install Dependencies
+          python-version: 3.10.9
+
+      - name: Install Python dependencies
         run: |
-          pip install -r requirements.txt -r requirements-dev.txt
-          
-      # Build python script into a stand-alone exe
-      - uses: Nuitka/Nuitka-Action@v0.4
-        with:
-          script-name: main.py
+          python -m pip install --upgrade pip pyinstaller
+          pip install -r requirements.txt
 
-      # Uploads artifact
-      - name: Upload Artifact
+      - name: Build with pyinstaller
+        run: pyinstaller -i ./img/icon.ico --onefile --distpath ./build --name=vrc-discord-osc main.py
+
+      - name: Deploy EXE
         uses: actions/upload-artifact@v3
         with:
-          name: exe
-          path: build/main.exe
+          name: vrc-discord-osc
+          path: ./build/vrc-discord-osc.exe
+          if-no-files-found: error
+
+      - name: Deploy Unity Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: bracelet
+          path: ./bracelet.unitypackage
+          if-no-files-found: error
+        
+
+  release:
+    needs: build
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: vrc-discord-osc
+          path: artifact/vrc-discord-osc
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: bracelet
+          path: artifact/bracelet
+      
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: artifact
+
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            artifact/vrc-discord-osc/vrc-discord-osc.exe
+            artifact/bracelet/bracelet.unitypackage
