@@ -115,6 +115,6 @@ This doc assumes you have a Unity Package with an avatar already set up to be pu
       <img src="./img/screenshot-animator-example-3.png">
    </p>
 
-1. If you are having trouble getting the OSC program to communicate with VRChat, checkout this troubleshooting doc that Wizard wrote for their TTS App: https://github.com/VRCWizard/TTS-Voice-Wizard/wiki/Text-Setup#troubleshooting
+1. If you are having trouble getting the OSC program to communicate with VRChat, checkout this troubleshooting doc that Wizard wrote for their TTS App: https://github.com/VRCWizard/TTS-Voice-Wizard/wiki/OSC-Troubleshooting
    
    
