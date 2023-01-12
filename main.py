@@ -1,31 +1,22 @@
 import asyncio
 from discord_band import DiscordBand
 from windows import Windows
-from winsdk.windows.ui.notifications.management import UserNotificationListener, UserNotificationListenerAccessStatus
-from winsdk.windows.foundation.metadata import ApiInformation
+from winsdk.windows.ui.notifications import UserNotification
 
 
 def handler(discord_band: DiscordBand):
-    def closure(notification):
-        if hasattr(notification, "app_info"):
-            app_name = notification.app_info.display_info.display_name
-            if app_name == "Discord":
-                discord_band.enable()
+    def closure(notification: UserNotification) -> None:
+        if discord_band.is_discord_notification(notification):
+            if discord_band.is_call_notification(notification):
+                discord_band.enable_call_notification()
+            else:
+                discord_band.enable_band_notification()
     return closure
 
 
 async def init(discord_band: DiscordBand, windows: Windows):
-    if not ApiInformation.is_type_present("Windows.UI.Notifications.Management.UserNotificationListener"):
-        print("UserNotificationListener is not supported on this device.")
+    if not await windows.can_read_notifications():
         exit()
-
-    listener = UserNotificationListener.get_current()
-    accessStatus = await listener.request_access_async()
-
-    if accessStatus != UserNotificationListenerAccessStatus.ALLOWED:
-        print("Access to UserNotificationListener is not allowed.")
-        exit()
-
     windows.add_notification_listener(handler(discord_band))
     await windows.run()
 
