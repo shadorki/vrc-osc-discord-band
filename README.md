@@ -7,6 +7,7 @@ A python application for VRChat players to receive discord notifications on thei
 - Application - Shadoki
 - Bracelet Model - Sorru
 - Shader Configuration - Harumodoki
+- [Avatars 3.0 Manager](https://github.com/VRLabs/Avatars-3.0-Manager) - For the animator merging script
 
 ## Table of Contents
 
@@ -72,7 +73,7 @@ This doc assumes you have a Unity Package with an avatar already set up to be pu
 
 1. Import the unity package from the latest release.
 
-1. If the materials in `Assets/OSC Braclet/MAT` are purple, set them all to Poiyomi and the settings should transfer
+1. If the materials in `Assets/OSC Bracelet/MAT` are purple, set them all to Poiyomi and the settings should transfer
 
 1. Place the prefab in your scene
 
@@ -82,39 +83,18 @@ This doc assumes you have a Unity Package with an avatar already set up to be pu
       <img src="./img/screenshot-bone.png">
    </p>
 
-1. In your avatar's expression parameters, create a new parameter with the following name: `osc_discord_band` of type `Bool`.
-
-
-   <p align="center">
-      <img src="./img/screenshot-avatar-parameters.png">
-   </p>
-
-1. In your avatar's FX layer animator, create a new animation parameter with the following name: `osc_discord_band` of type `Bool`.
+1. In your tool bar click `Shadoki > Discord Bracelet`
 
    <p align="center">
-      <img src="./img/screenshot-animator-parameters.png">
+      <img src="./img/screenshot-unity-tool.png">
    </p>
 
-1. In your avatar's FX layer animator, under the `Layers` tab create a new layer and set the `Weight` to 1:
-
+1. Add the Discord Bracelet, Controllers, and Animations into the editor window and press `Apply`. Keep an eye in the debug console for possible errors.
 
    <p align="center">
-      <img src="./img/screenshot-animator-layer.png">
+      <img src="./img/screenshot-bracelet-tool.png">
    </p>
 
-   At the time of writing this readme I haven't been able to figure out how to add an animation into the unity package that is easily transferable to your avatar. In the meantime till I figure out how to automate that, you will have to create your own animation.
-
-1. Create an animation that is enabled when the `osc_discord_band` parameter is set true. Here are some screenshot examples of my setup:
-   <p align="center">
-      <img src="./img/screenshot-animator-example-1.png">
-   </p>
-   <p align="center">
-      <img src="./img/screenshot-animator-example-2.png">
-   </p>
-   <p align="center">
-      <img src="./img/screenshot-animator-example-3.png">
-   </p>
+1. Your new FX layer should be present in `OSC Bracelet/Animations`. Drag and drop it into your avatar's FX Layer.
 
 1. If you are having trouble getting the OSC program to communicate with VRChat, checkout this troubleshooting doc that Wizard wrote for their TTS App: https://github.com/VRCWizard/TTS-Voice-Wizard/wiki/OSC-Troubleshooting
-   
-   
