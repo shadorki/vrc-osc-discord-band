@@ -13,6 +13,7 @@ class DiscordBand:
         self.disable_timer = 0
         self.thread = Thread(target=self.run)
         self.thread.start()
+        self.versions = ["Discord", "Discord Canary", "Discord PTB"]
 
     def is_call_notification(self, notification: UserNotification) -> bool:
         try:
@@ -36,7 +37,8 @@ class DiscordBand:
         try:
             if hasattr(notification, "app_info"):
                 app_name = notification.app_info.display_info.display_name
-                if app_name == "Discord":
+                if app_name in self.versions:
+                    print(f'Notification from {app_name}')
                     return True
             return False
         except AttributeError:
