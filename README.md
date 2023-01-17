@@ -13,6 +13,7 @@ A python application for VRChat players to receive discord notifications on thei
 
 - [Installation](#installation)
 - [Contributing](#contributing)
+- [Setting a different port number](#setting-a-different-port-number)
 - [Setting up your avatar](#setting-up-your-avatar)
 
 ## Installation
@@ -57,7 +58,23 @@ Head over to the [Releases](https://github.com/uzair-ashraf/vrc-osc-discord-band
 
    This repository is setup with a Github action to compile the standalone executable. If you would like to compile it on your local machine you can read the action for the command via `pyinstaller` [here](./.github/workflows/release.yml).
 
-### Setting up your avatar
+## Setting a different port number
+
+---
+
+In the same directory your executable is located in, create a file named `vrc-discord-osc.config.json`
+
+In the file add the following contents, and change `9000` to the port you'd like to send your OSC data to.
+
+```json
+{
+  "port": 9000
+}
+```
+
+If you did it properly the next time you run your application, the terminal window should state the port number you set.
+
+## Setting up your avatar
 
 ---
 

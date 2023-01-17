@@ -6,8 +6,8 @@ import osc_parameters
 
 
 class DiscordBand:
-    def __init__(self):
-        self.osc_client = SimpleUDPClient("127.0.0.1", 9000)
+    def __init__(self, port: int):
+        self.osc_client = SimpleUDPClient("127.0.0.1", port or 9000)
         self.is_enabled = False
         self.is_disposing = False
         self.disable_timer = 0
