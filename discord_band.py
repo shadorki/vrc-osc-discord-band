@@ -1,4 +1,5 @@
 from winsdk.windows.ui.notifications import UserNotification
+from katosc import KatOsc
 from pythonosc.udp_client import SimpleUDPClient
 from threading import Thread
 import time
@@ -6,14 +7,22 @@ import osc_parameters
 
 
 class DiscordBand:
-    def __init__(self, port: int):
-        self.osc_client = SimpleUDPClient("127.0.0.1", port or 9000)
+    def __init__(self, osc_client: SimpleUDPClient, kat_text: KatOsc):
+        self.osc_client = osc_client
         self.is_enabled = False
         self.is_disposing = False
         self.disable_timer = 0
+        self.versions = ["Discord", "Discord Canary", "Discord PTB"]
+        self.kat_text = kat_text
+        self.last_seen_message: dict[str, str] = None
         self.thread = Thread(target=self.run)
         self.thread.start()
-        self.versions = ["Discord", "Discord Canary", "Discord PTB"]
+
+    def handle_display_notification(self) -> None:
+        if self.last_seen_message == None:
+            return print("No message found")
+        self.kat_text.set_text(
+            f'{self.last_seen_message["username"]}: {self.last_seen_message["message"]}')
 
     def is_call_notification(self, notification: UserNotification) -> bool:
         try:
@@ -32,6 +41,26 @@ class DiscordBand:
             return message.text == expected
         except AttributeError:
             return False
+
+    def store_message(self, notification: UserNotification) -> bool:
+        try:
+            binding = notification.notification.visual.get_binding(
+                "ToastGeneric")
+            elements = binding.get_text_elements()
+            if elements.size != 2:
+                return
+            username = elements.get_at(0)
+            message = elements.get_at(1)
+            if username is None or message is None:
+                return
+            if username.text == "" or message.text == "":
+                return
+            self.last_seen_message = {
+                "username": username.text,
+                "message": message.text
+            }
+        except:
+            pass
 
     def is_discord_notification(self, notification: UserNotification) -> bool:
         try:
