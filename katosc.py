@@ -346,32 +346,19 @@ class KatOsc:
         self.osc_server_test_step: int = 0
         self.osc_dispatcher: dispatcher.Dispatcher = None
 
-        if self.osc_enable_server:
-            self.osc_start_server()
+    def init(self, osc_server: osc_server.ThreadingOSCUDPServer, osc_dispatcher: dispatcher.Dispatcher):
+        self.osc_server = osc_server
+        self.osc_dispatcher = osc_dispatcher
+        self.osc_server_test_step = 1
 
-        # Start timer loop
         self.osc_chatbox_timer.start()
         self.osc_timer.start()
 
-    # Starts the OSC Server
-    def osc_start_server(self):
-        if self.osc_server == None:
-            try:
-                self.osc_server_test_step = 1
-
-                self.osc_dispatcher = dispatcher.Dispatcher()
-                self.osc_dispatcher.map(
-                    self.osc_parameter_prefix + self.param_sync + "*", self.osc_server_handler_char)
-                self.osc_dispatcher.map(
-                    self.osc_avatar_change_path + "*", self.osc_server_handler_avatar)
-
-                self.osc_server = osc_server.ThreadingOSCUDPServer(
-                    (self.osc_server_ip, self.osc_server_port), self.osc_dispatcher, asyncio.get_event_loop())
-                threading.Thread(target=self.osc_server_serve,
-                                 daemon=True).start()
-            except:
-                self.osc_enable_server = False
-                self.osc_server_test_step = 0
+    def map_dispatchers(self, dispatcher: dispatcher.Dispatcher):
+        dispatcher.map(
+            self.osc_parameter_prefix + self.param_sync + "*", self.osc_server_handler_char)
+        dispatcher.map(
+            self.osc_avatar_change_path + "*", self.osc_server_handler_avatar)
 
     # Stops the OSC Server
     def osc_stop_server(self):
@@ -388,10 +375,7 @@ class KatOsc:
     # Sets the sync parameter count
 
     def set_sync_params(self, sync_params: int):
-        if sync_params == 0:
-            # Automatic sync parameters
-            self.osc_start_server()
-        else:
+        if sync_params != 0:
             # Manual sync parameter setting
             self.sync_params = sync_params
             self.sync_params_last = self.sync_params
@@ -598,7 +582,6 @@ class KatOsc:
         self.osc_chatbox_timer.start()
         self.osc_timer.start()
         self.show()
-        self.osc_start_server()
 
     # show overlay
 

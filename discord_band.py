@@ -1,6 +1,7 @@
 from winsdk.windows.ui.notifications import UserNotification
 from katosc import KatOsc
 from pythonosc.udp_client import SimpleUDPClient
+from pythonosc import dispatcher
 from threading import Thread
 import time
 import osc_parameters
@@ -18,9 +19,21 @@ class DiscordBand:
         self.thread = Thread(target=self.run)
         self.thread.start()
 
+    def handle_collision_enter(self, address: str, *args) -> None:
+        if len(args) != 1:
+            return
+        was_entered = args[0]
+        if not was_entered:
+            return
+        print("Show band")
+
+    def map_dispatchers(self, dispatcher: dispatcher.Dispatcher):
+        dispatcher.map(osc_parameters.DISCORD_ON_COLLISION_ENTER,
+                       self.handle_collision_enter)
+
     def handle_display_notification(self) -> None:
         if self.last_seen_message == None:
-            return print("No message found")
+            return
         self.kat_text.set_text(
             f'{self.last_seen_message["username"]}: {self.last_seen_message["message"]}')
 
