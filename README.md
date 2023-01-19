@@ -115,3 +115,7 @@ This doc assumes you have a Unity Package with an avatar already set up to be pu
 1. Your new FX layer should be present in `OSC Bracelet/Animations`. Drag and drop it into your avatar's FX Layer.
 
 1. If you are having trouble getting the OSC program to communicate with VRChat, checkout this troubleshooting doc that Wizard wrote for their TTS App: https://github.com/VRCWizard/TTS-Voice-Wizard/wiki/OSC-Troubleshooting
+
+1. Additionally, this program requires that you have Windows Notifications enabled for Discord to run properly. This should be enabled by default but if you are having trouble double check. Go to Windows Settings > System > Notifications. Make sure notifications are turned on at the top and make sure that notifications are turned on specifically for discord.
+<img width="845" alt="image" src="https://user-images.githubusercontent.com/101527472/213462490-2215bbd4-b673-4447-9fa2-4974e97fee0a.png">
+
