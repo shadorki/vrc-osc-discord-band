@@ -23,7 +23,7 @@ async def init(discord_band: DiscordBand, windows: Windows):
 
 discord_band = None
 try:
-    print("Starting VRC Discord Notifications...")
+    print("Starting OSC Discord Notifications...")
     port = config.get_port_number()
     discord_band = DiscordBand(port)
     windows = Windows()
