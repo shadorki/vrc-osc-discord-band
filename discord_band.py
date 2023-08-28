@@ -31,7 +31,7 @@ class DiscordBand:
             if elements.size != 2:
                 return False
             username = elements.get_at(0)
-            return username not in self.username_allow_list
+            return username.text not in self.username_allow_list
         except:
             return False
 
