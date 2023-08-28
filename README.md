@@ -13,12 +13,10 @@ A python application for VRChat players to receive discord notifications on thei
 
 - [Installation](#installation)
 - [Contributing](#contributing)
-- [Setting a different port number](#setting-a-different-port-number)
+- [Settings](#settings)
 - [Setting up your avatar](#setting-up-your-avatar)
 
 ## Installation
-
----
 
 Head over to the [Releases](https://github.com/uzair-ashraf/vrc-osc-discord-band/releases) page to get the latest release.
 
@@ -26,8 +24,6 @@ Head over to the [Releases](https://github.com/uzair-ashraf/vrc-osc-discord-band
 - Download the Unity Package and add the Prefab to your avatar. ([More Instructions](#setting-up-your-avatar) on this below)
 
 ## Contributing
-
----
 
 ### Requirements
 
@@ -58,9 +54,7 @@ Head over to the [Releases](https://github.com/uzair-ashraf/vrc-osc-discord-band
 
    This repository is setup with a Github action to compile the standalone executable. If you would like to compile it on your local machine you can read the action for the command via `pyinstaller` [here](./.github/workflows/release.yml).
 
-## Setting a different port number
-
----
+## Settings
 
 In the same directory your executable is located in, create a file named `vrc-discord-osc.config.json`
 
@@ -68,15 +62,21 @@ In the file add the following contents, and change `9000` to the port you'd like
 
 ```json
 {
-  "port": 9000
+  "port": 9000,
+  "username_allow_list": []
 }
 ```
 
-If you did it properly the next time you run your application, the terminal window should state the port number you set.
+If you'd like the application to only dispatch notifications when a specific user messages you, you may update the `username_allow_list` field like below:
+
+```json
+{
+  "port": 9000,
+  "username_allow_list": ["Harumodoki", "Sorru"]
+}
+```
 
 ## Setting up your avatar
-
----
 
 If this your first time working with OSC head over to the [VRChat docs to learn more](https://docs.vrchat.com/docs/osc-overview).
 
@@ -117,5 +117,4 @@ This doc assumes you have a Unity Package with an avatar already set up to be pu
 1. If you are having trouble getting the OSC program to communicate with VRChat, checkout this troubleshooting doc that Wizard wrote for their TTS App: https://github.com/VRCWizard/TTS-Voice-Wizard/wiki/OSC-Troubleshooting
 
 1. Additionally, this program requires that you have Windows Notifications enabled for Discord to run properly. This should be enabled by default but if you are having trouble double check. Go to Windows Settings > System > Notifications. Make sure notifications are turned on at the top and make sure that notifications are turned on specifically for discord.
-<img width="845" alt="image" src="https://user-images.githubusercontent.com/101527472/213462490-2215bbd4-b673-4447-9fa2-4974e97fee0a.png">
-
+   <img width="845" alt="image" src="https://user-images.githubusercontent.com/101527472/213462490-2215bbd4-b673-4447-9fa2-4974e97fee0a.png">

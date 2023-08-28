@@ -8,10 +8,11 @@ from winsdk.windows.ui.notifications import UserNotification
 def handler(discord_band: DiscordBand):
     def closure(notification: UserNotification) -> None:
         if discord_band.is_discord_notification(notification):
-            if discord_band.is_call_notification(notification):
-                discord_band.enable_call_notification()
-            else:
-                discord_band.enable_band_notification()
+            if not discord_band.should_ignore_notification(notification):
+                if discord_band.is_call_notification(notification):
+                    discord_band.enable_call_notification()
+                else:
+                    discord_band.enable_band_notification()
     return closure
 
 
@@ -24,8 +25,10 @@ async def init(discord_band: DiscordBand, windows: Windows):
 discord_band = None
 try:
     print("Starting VRC Discord Notifications...")
-    port = config.get_port_number()
-    discord_band = DiscordBand(port)
+    c = config.get_config()
+    port = config.get_port_number(c)
+    username_allow_list = config.get_username_allow_list(c)
+    discord_band = DiscordBand(port, username_allow_list)
     windows = Windows()
     asyncio.run(init(discord_band, windows))
 except KeyboardInterrupt:
