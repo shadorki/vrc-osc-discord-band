@@ -18,22 +18,19 @@ class DiscordBand:
         self.username_allow_list = username_allow_list or []
 
     def should_ignore_notification(self, notification: UserNotification) -> bool:
-        try:
-            if self.username_allow_list.size == 0:
-                return False
-            binding = notification.notification.visual.get_binding(
-                "ToastGeneric")
-            if binding is None:
-                return False
-            elements = binding.get_text_elements()
-            if elements is None:
-                return False
-            if elements.size != 2:
-                return False
-            username = elements.get_at(0)
-            return username.text not in self.username_allow_list
-        except:
+        if len(self.username_allow_list) == 0:
             return False
+        binding = notification.notification.visual.get_binding(
+            "ToastGeneric")
+        if binding is None:
+            return False
+        elements = binding.get_text_elements()
+        if elements is None:
+            return False
+        if elements.size != 2:
+            return False
+        username = elements.get_at(0)
+        return username.text not in self.username_allow_list
 
     def is_call_notification(self, notification: UserNotification) -> bool:
         try:
