@@ -20,7 +20,7 @@ A python application for VRChat players to receive discord notifications on thei
 
 ---
 
-Head over to the [Releases](https://github.com/uzair-ashraf/vrc-osc-discord-band/releases) page to get the latest release.
+Head over to the [Releases](https://github.com/shadorki/vrc-osc-discord-band/releases) page to get the latest release.
 
 - Download the executable and run it after you start VRChat.
 - Download the Unity Package and add the Prefab to your avatar. ([More Instructions](#setting-up-your-avatar) on this below)
@@ -38,7 +38,7 @@ Head over to the [Releases](https://github.com/uzair-ashraf/vrc-osc-discord-band
 1. Clone the repository
 
    ```shell
-   git clone git@github.com:uzair-ashraf/vrc-osc-discord-band.git
+   git clone git@github.com:shadorki/vrc-osc-discord-band.git
    cd vrc-osc-discord-band
    ```
 
@@ -82,7 +82,7 @@ If this your first time working with OSC head over to the [VRChat docs to learn 
 
 This doc assumes you have a Unity Package with an avatar already set up to be published to VRChat along with some knowledge of how to use Unity.
 
-1. Head over to the [releases](https://github.com/uzair-ashraf/vrc-osc-discord-band/releases) page and download the unity package from the latest release.
+1. Head over to the [releases](https://github.com/shadorki/vrc-osc-discord-band/releases) page and download the unity package from the latest release.
 
 1. Open your Unity Project with your avatar.
 
